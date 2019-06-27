@@ -280,10 +280,23 @@ Contains functions that allow for a workout
 class Workout{
 public:
 	/*
-	Initializes the date, the workout timer, and the exercise list;
-	Starts the workout
+	Initializes the date, the workout timer, and the exercise list
 	*/
 	Workout();
+
+	/*
+	Performs the exercise at the given index
+
+	@param exerciseIndex the index of the exercise to be performed
+	*/
+	void performExercise(int exerciseIndex);
+
+	/*
+	Counts down the seconds for the rest timer
+
+	@param secs the time to rest in seconds
+	*/
+	void restTimer(int secs);
 
 private:
 	time_t date;
