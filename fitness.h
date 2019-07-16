@@ -35,6 +35,8 @@ public:
 	double calculate_volume();
 	void remove();
 
+	std::string get_info();
+
 private:
 	struct Set {
 		Set(double set_weight, int num_reps, int exercise_time, int rest_time, bool yAMRAP, bool yALAP);
@@ -56,10 +58,51 @@ private:
 	std::vector<Set> sets;
 };
 
+class WorkoutDay {
+public:
+	WorkoutDay(std::string plan_name, std::string day_name, int index);
+	
+	void add_exercise(int index, Exercise e);
+	std::vector<Exercise>& get_exercises();
+	void remove_exercise(int index);
+	int size();
+	void clear();
+
+	void display_day();
+
+	void update();
+private:
+	std::vector<Exercise> exercises;
+	std::string plan_name;
+	std::string day_name;
+	int day_index;
+};
+
+class WorkoutPlan {
+public:
+	WorkoutPlan(std::string plan_name);
+
+	void add_day(int index, WorkoutDay& w);
+	void remove_day(int index);
+
+	void display_plan();
+
+	int size();
+private:
+	std::vector<WorkoutDay> workoutdays;
+	std::string plan_name;
+	std::string path;
+};
+
 class Menu {
 public:
-	void create_exercise();
+	Exercise create_exercise();
+	WorkoutDay create_day(std::string planname, int index);
+	WorkoutPlan create_plan();
 
+	void edit_exercise(Exercise& ex);
+	
+	//Exercise creation functions
 	void prompt_create_set(Exercise& e, int sets, int index);
 	void prompt_fast_add(Exercise& e);
 	void prompt_add(Exercise& e);
@@ -73,7 +116,17 @@ public:
 	void prompt_specific_rest(Exercise& e);
 	void prompt_change_name(Exercise& e);
 	void prompt_remove(Exercise& e);
-	
+
+	//Day creation functions
+	void prompt_add_exercise(WorkoutDay& w);
+	void prompt_edit_exercise(WorkoutDay& w);
+	void prompt_remove_exercise(WorkoutDay& w);
+	void prompt_clear_exercise(WorkoutDay& w);
+
+	//Plan creation functions
+	/*void prompt_add_day(WorkoutPlan& w);
+	void prompt_remove_day(WorkoutPlan& w);
+	*/
 
 private:
 	bool exit(std::string response);

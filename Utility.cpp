@@ -20,7 +20,8 @@ bool string_is_double(const std::string s)
 	return ((std::istringstream(s) >> d >> std::ws).eof());
 }
 
-std::string space_to_underscore(std::string s) {
+std::string space_to_underscore(std::string s) 
+{
 	std::string convert;
 	for (int i = 0; i < s.length(); i++) {
 		if (s[i] == ' ') {
@@ -31,4 +32,20 @@ std::string space_to_underscore(std::string s) {
 		}
 	}
 	return convert;
+}
+
+bool string_to_bool(std::string s)
+{
+	if (s == "true") {
+		return true;
+	}
+	return false;
+}
+
+std::string bool_to_string(bool b)
+{
+	if (b) {
+		return "true";
+	}
+	return "false";
 }

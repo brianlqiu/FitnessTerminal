@@ -9,4 +9,7 @@ bool string_is_double(const std::string s);
 
 std::string space_to_underscore(std::string s);
 
+bool string_to_bool(const std::string s);
+
+std::string bool_to_string(bool b);
 #endif

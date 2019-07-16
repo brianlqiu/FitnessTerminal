@@ -1,11 +1,17 @@
-main.exe: main.cpp Utility.o Exercise.o Menu.o 
-	g++ -o main main.cpp Exercise.o Menu.o Utility.o
+main.exe: main.cpp utility.o exercise.o menu.o workoutday.o
+	g++ -o main main.cpp exercise.o menu.o utility.o workoutday.o
 
-Exercise.o: Exercise.cpp
-	g++ -c Exercise.cpp
+exercise.o: exercise.cpp
+	g++ -c exercise.cpp
 
-Menu.o: Menu.cpp
-	g++ -c Menu.cpp
+menu.o: menu.cpp
+	g++ -c menu.cpp
 
-Utility.o: Utility.cpp
-	g++ -c Utility.cpp
+utility.o: utility.cpp
+	g++ -c utility.cpp
+
+workoutday.o: workoutday.cpp 
+	g++ -c workoutday.cpp
+
+clean:
+	del /P *.txt

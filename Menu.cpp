@@ -222,7 +222,7 @@ int Menu::prompt_ALAP()
 int Menu::prompt_index(int size, bool add)
 {
 	while (true) {
-		std::cout << "Input the index for the set: ";
+		std::cout << "Input the index: ";
 		std::string response;
 		int index;
 		std::getline(std::cin, response);
@@ -250,46 +250,44 @@ int Menu::prompt_index(int size, bool add)
 
 void Menu::prompt_create_set(Exercise& e, int sets, int index)
 {
-	double exercise_weight = prompt_weight();
-	if (exercise_weight != -1) {
-		int r_or_t_response = prompt_reps_or_time();
-		if (r_or_t_response != -1) {
-			if (r_or_t_response == 0) {
-				int num_reps = prompt_reps();
-				if (num_reps != -1) {
-					int yAMRAP = prompt_AMRAP();
-					if (yAMRAP != -1) {
-						int rest_time = prompt_rest();
-						if (rest_time != -1) {
-							if (index == -1) {
-								e.fast_add(sets, exercise_weight, num_reps, -1, rest_time, yAMRAP, false);
-							}
-							else {
-								e.add_set(index, exercise_weight, num_reps, -1, rest_time, yAMRAP, false);
-							}
+	int r_or_t_response = prompt_reps_or_time();
+	if (r_or_t_response != -1) {
+		if (r_or_t_response == 0) {
+			int num_reps = prompt_reps();
+			if (num_reps != -1) {
+				int yAMRAP = prompt_AMRAP();
+				if (yAMRAP != -1) {
+					int rest_time = prompt_rest();
+					if (rest_time != -1) {
+						if (index == -1) {
+							e.fast_add(sets, -1, num_reps, -1, rest_time, yAMRAP, false);
+						}
+						else {
+							e.add_set(index, -1, num_reps, -1, rest_time, yAMRAP, false);
 						}
 					}
 				}
 			}
-			else {
-				int exercise_time = prompt_time();
-				if (exercise_time != -1) {
-					int yALAP = prompt_ALAP();
-					if (yALAP != -1) {
-						int rest_time = prompt_rest();
-						if (rest_time != -1) {
-							if (index == -1) {
-								e.fast_add(sets, exercise_weight, -1, exercise_time, rest_time, false, yALAP);
-							}
-							else {
-								e.add_set(index, exercise_weight, -1, exercise_time, rest_time, false, yALAP);
-							}
+		}
+		else {
+			int exercise_time = prompt_time();
+			if (exercise_time != -1) {
+				int yALAP = prompt_ALAP();
+				if (yALAP != -1) {
+					int rest_time = prompt_rest();
+					if (rest_time != -1) {
+						if (index == -1) {
+							e.fast_add(sets, -1, -1, exercise_time, rest_time, false, yALAP);
+						}
+						else {
+							e.add_set(index, -1, -1, exercise_time, rest_time, false, yALAP);
 						}
 					}
 				}
 			}
 		}
 	}
+	
 }
 
 void Menu::prompt_fast_add(Exercise& e)
@@ -412,99 +410,189 @@ void Menu::prompt_remove(Exercise& e)
 	}
 }
 
-void Menu::create_exercise() 
+Exercise Menu::create_exercise() 
 {
 	std::string name;
 	name = prompt_name();
 	if (name != "-1") {
 		Exercise new_exercise(name);
+		edit_exercise(new_exercise);
+		return new_exercise;
+	}
+}
+
+
+void Menu::edit_exercise(Exercise& ex) {
+	Exercise& e = ex;
+	std::string response;
+	do {
+		std::cout << "-----------------------------------" << std::endl;
+		e.display_exercise();
+		std::cout << "-----------------------------------" << std::endl;
+		std::cout << "Options: " << std::endl;
+		std::cout << "1 - Fast add" << std::endl;
+		std::cout << "2 - Add set" << std::endl;
+		std::cout << "3 - Change all set reps/AMRAP" << std::endl;
+		std::cout << "4 - Change all set times/ALAP" << std::endl;
+		std::cout << "5 - Change all set rest times" << std::endl;
+		std::cout << "6 - Change specific set reps/AMRAP" << std::endl;
+		std::cout << "7 - Change specific set time/ALAP" << std::endl;
+		std::cout << "8 - Change specific set rest time" << std::endl;
+		std::cout << "9 - Change exercise name" << std::endl;
+		std::cout << "10 - Remove a set" << std::endl;
+		std::cout << "11 - Clear all sets" << std::endl;
+		std::cout << "12 - Remove the exercise" << std::endl;
+		std::cout << "-----------------------------------" << std::endl;
+		std::cout << std::endl << "Enter your input: ";
+		std::getline(std::cin, response);
+
+		if (response == "1") {
+			prompt_fast_add(e);
+		}
+		else if (response == "2") {
+			prompt_add(e);
+		}
+		else if (response == "3") {
+			prompt_all_reps(e);
+		}
+		else if (response == "4") {
+			prompt_all_time(e);
+		}
+		else if (response == "5") {
+			prompt_all_rest(e);
+		}
+		else if (response == "6") {
+			prompt_specific_reps(e);
+		}
+		else if (response == "7") {
+			prompt_specific_time(e);
+		}
+		else if (response == "8") {
+			prompt_specific_rest(e);
+		}
+		else if (response == "9") {
+			prompt_change_name(e);
+		}
+		else if (response == "10") {
+			prompt_remove(e);
+		}
+		else if (response == "11") {
+			std::cout << "Are you sure you want to clear all sets? (y/n): ";
+			std::getline(std::cin, response);
+			if (response == "y") {
+				e.clear();
+			}
+			else {
+				std::cout << "Exited" << std::endl;
+			}
+		}
+		else if (response == "12") {
+			std::cout << "Are you sure you want to delete this exercise? (y/n): ";
+			std::getline(std::cin, response);
+			if (response == "y") {
+				e.remove();
+				response = "x";
+			}
+			else {
+				std::cout << "Exited" << std::endl;
+			}
+		}
+		else if (response != "x") {
+			std::cout << "Invalid response";
+		}
+	} while (!exit(response));
+}
+
+void Menu::prompt_add_exercise(WorkoutDay& w)
+{
+	int index = 1;
+	if (w.size() > 0) {
+		index = prompt_index(w.size(), true);
+	}
+	if (index != -1) {
+		Exercise e = create_exercise();
+		w.add_exercise(index - 1, e);
+	}
+}
+
+void Menu::prompt_edit_exercise(WorkoutDay& w)
+{
+	int index = prompt_index(w.size(), false);
+	if (index != -1) {
+		edit_exercise(w.get_exercises()[index]);
+	}
+}
+
+void Menu::prompt_remove_exercise(WorkoutDay& w)
+{
+	int index = prompt_index(w.size(), false);
+	if (index != -1) {
+		w.remove_exercise(index);
+	}
+}
+
+void Menu::prompt_clear_exercise(WorkoutDay& w)
+{
+	std::string response;
+	std::cout << "Are you sure you want to clear all exercises? (y/n): ";
+	std::getline(std::cin, response);
+	if (response != "n") {
+		w.clear();
+	}
+}
+
+WorkoutDay Menu::create_day(std::string planname, int index)
+{
+	std::string name = prompt_name();
+	if (name != "-1") {
+		WorkoutDay d(planname, name, index);
 		std::string response;
 		do {
 			std::cout << "-----------------------------------" << std::endl;
-			new_exercise.display_exercise();
+			d.display_day();
 			std::cout << "-----------------------------------" << std::endl;
 			std::cout << "Options: " << std::endl;
-			std::cout << "1 - Fast add" << std::endl;
-			std::cout << "2 - Add set" << std::endl;
-			std::cout << "3 - Change all set weights" << std::endl;
-			std::cout << "4 - Change all set reps/AMRAP" << std::endl;
-			std::cout << "5 - Change all set times/ALAP" << std::endl;
-			std::cout << "6 - Change all set rest times" << std::endl;
-			std::cout << "7 - Change specific set weight" << std::endl;
-			std::cout << "8 - Change specific set reps/AMRAP" << std::endl;
-			std::cout << "9 - Change specific set time/ALAP" << std::endl;
-			std::cout << "10 - Change specific set rest time" << std::endl;
-			std::cout << "11 - Change exercise name" << std::endl;
-			std::cout << "12 - Remove a set" << std::endl;
-			std::cout << "13 - Clear all sets" << std::endl;
-			std::cout << "14 - Remove the exercise" << std::endl;
+			std::cout << "1 - Add an exercise" << std::endl;
+			std::cout << "2 - Edit an exercise" << std::endl;
+			std::cout << "3 - Remove an exercise" << std::endl;
+			std::cout << "4 - Clear all exercises" << std::endl;
 			std::cout << "-----------------------------------" << std::endl;
 			std::cout << std::endl << "Enter your input: ";
 			std::getline(std::cin, response);
 
 			if (response == "1") {
-				prompt_fast_add(new_exercise);
-			} 
+				prompt_add_exercise(d);
+				d.update();
+			}
 			else if (response == "2") {
-				prompt_add(new_exercise);
+				prompt_edit_exercise(d);
+				d.update();
 			}
 			else if (response == "3") {
-				prompt_all_weight(new_exercise);
+				prompt_remove_exercise(d);
+				d.update();
 			}
 			else if (response == "4") {
-				prompt_all_reps(new_exercise);
-			}
-			else if (response == "5") {
-				prompt_all_time(new_exercise);
-			}
-			else if (response == "6") {
-				prompt_all_rest(new_exercise);
-			}
-			else if (response == "7") {
-				prompt_specific_weight(new_exercise);
-			}
-			else if (response == "8") {
-				prompt_specific_reps(new_exercise);
-			}
-			else if (response == "9") {
-				prompt_specific_time(new_exercise);
-			}
-			else if (response == "10") {
-				prompt_specific_rest(new_exercise);
-			}
-			else if (response == "11") {
-				prompt_change_name(new_exercise);
-			}
-			else if (response == "12") {
-				prompt_remove(new_exercise);
-			}
-			else if (response == "13") {
-				std::cout << "Are you sure you want to clear all sets? (y/n): ";
-				std::getline(std::cin, response);
-				if (response == "y") {
-					new_exercise.clear();
-				}
-				else {
-					std::cout << "Exited" << std::endl;
-				}
-			}
-			else if (response == "14") {
-				std::cout << "Are you sure you want to delete this exercise? (y/n): ";
-				std::getline(std::cin, response);
-				if (response == "y") {
-					new_exercise.remove();
-					response = "x";
-				}
-				else {
-					std::cout << "Exited" << std::endl;
-				}
+				prompt_clear_exercise(d);
+				d.update();
 			}
 			else {
-				std::cout << "Invalid response";
+				std::cout << "Invalid response" << std::endl;
 			}
 
 		} while (!exit(response));
+		return d;
 	}
-	
-
 }
+
+/*
+WorkoutPlan Menu::create_plan()
+{
+	std::string name = prompt_name();
+	if (name != "-1") {
+		WorkoutPlan p(name);
+		std::string response;
+		
+	}
+}
+*/

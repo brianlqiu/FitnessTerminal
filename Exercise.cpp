@@ -233,3 +233,13 @@ void Exercise::remove()
 {
 	std::remove(file_name.c_str());
 }
+
+std::string Exercise::get_info()
+{
+	std::string info = exercise_name + "\n";
+	for (int i = 0; i < sets.size(); i++) {
+		info += std::to_string(sets[i].reps) + " " + std::to_string(sets[i].time) + " " + std::to_string(sets[i].rest) + " " + bool_to_string(sets[i].AMRAP) + " " + bool_to_string(sets[i].ALAP);
+		info += "\n";
+	}
+	return info;
+}

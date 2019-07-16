@@ -1,0 +1,36 @@
+1222393001
+Barbell Bench Press
+5 -1 180 false false
+5 -1 180 false false
+5 -1 180 false false
+5 -1 180 false false
+5 -1 180 true false
+
+Incline Dumbbell Press
+12 -1 90 false false
+12 -1 90 false false
+12 -1 90 false false
+
+Cable Flies
+12 -1 90 false false
+12 -1 90 false false
+12 -1 90 false false
+
+Overhead Cable Tricep Extensions
+12 -1 90 false false
+12 -1 90 false false
+12 -1 90 true false
+
+Cable Tricep Pushdowns
+12 -1 90 false false
+12 -1 90 false false
+12 -1 90 false false
+
+Egyptian Lateral Raises
+18 -1 90 false false
+18 -1 90 false false
+18 -1 90 false false
+18 -1 90 false false
+18 -1 90 false false
+18 -1 90 false false
+
