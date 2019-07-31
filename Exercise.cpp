@@ -6,6 +6,7 @@
 #include <iostream>
 #include <stdio.h>
 
+
 Exercise::Set::Set(double set_weight = -1, int num_reps = -1, int exercise_time = -1, int rest_time = -1, bool yAMRAP = false, bool yALAP = false) {
 	weight = set_weight;
 	reps = num_reps;
@@ -17,14 +18,13 @@ Exercise::Set::Set(double set_weight = -1, int num_reps = -1, int exercise_time 
 
 bool Exercise::valid_index(int index) 
 {
-	if (index < 0 || index >= sets.size()) {
+	if (index < 0 || index >= static_cast<int>(sets.size())) {
 		std::cout << "Invalid index" << std::endl;
 		return false;
 	}
 	return true;
 }
 
-Exercise::Exercise() {}
 
 Exercise::Exercise(std::string name) 
 {
@@ -52,7 +52,7 @@ void Exercise::remove_set(int index)
 void Exercise::change_all_weight(double exercise_weight)
 {
 	if (exercise_weight > 0) {
-		for (int i = 0; i < sets.size(); i++) {
+		for (int i = 0; i < static_cast<int>(sets.size()); i++) {
 			sets[i].weight = exercise_weight;
 		}
 	}
@@ -64,7 +64,7 @@ void Exercise::change_all_weight(double exercise_weight)
 void Exercise::change_all_reps(int num_reps, bool yAMRAP)
 {
 	if (num_reps > 0) {
-		for (int i = 0; i < sets.size(); i++) {
+		for (int i = 0; i < static_cast<int>(sets.size()); i++) {
 			sets[i].reps = num_reps;
 			sets[i].time = -1;
 			sets[i].AMRAP = yAMRAP;
@@ -79,7 +79,7 @@ void Exercise::change_all_reps(int num_reps, bool yAMRAP)
 void Exercise::change_all_time(int exercise_time, bool yALAP)
 {
 	if (exercise_time > 0) {
-		for (int i = 0; i < sets.size(); i++) {
+		for (int i = 0; i < static_cast<int>(sets.size()); i++) {
 			sets[i].time = exercise_time;
 			sets[i].reps = -1;
 			sets[i].ALAP = yALAP;
@@ -94,7 +94,7 @@ void Exercise::change_all_time(int exercise_time, bool yALAP)
 void Exercise::change_all_rest(int rest_time)
 {
 	if (rest_time > 0) {
-		for (int i = 0; i < sets.size(); i++) {
+		for (int i = 0; i < static_cast<int>(sets.size()); i++) {
 			sets[i].rest = rest_time;
 		}
 	}
@@ -118,9 +118,7 @@ void Exercise::change_reps(int index, int num_reps, bool yAMRAP)
 	if (valid_index(index) && num_reps > 0) {
 		sets[index].reps = num_reps;
 		sets[index].time = -1;
-		if (yAMRAP) {
-			sets[index].AMRAP = true;
-		}
+		sets[index].AMRAP = yAMRAP;
 		sets[index].ALAP = false;
 	}
 	else {
@@ -156,7 +154,7 @@ void Exercise::change_name(std::string new_name)
 	if (new_name != "" && !file_exists(new_name)) {
 		exercise_name = new_name;
 		std::string tmp = space_to_underscore(exercise_name) + ".txt";
-		std::rename(file_name.c_str(), tmp.c_str());
+		(void)std::rename(file_name.c_str(), tmp.c_str());
 		file_name = tmp;
 	}
 	else {
@@ -173,15 +171,17 @@ void Exercise::fast_add(int num_sets, double exercise_weight, int num_reps, int 
 
 bool Exercise::skip() {
 	skipped = true;
+	return true;
 }
 
 bool Exercise::return_to() {
 	skipped = false;
+	return false;
 }
 
 void Exercise::display_exercise() {
 	std::cout << exercise_name << std::endl;
-	for (int i = 0; i < sets.size(); i++) {
+	for (int i = 0; i < static_cast<int>(sets.size()); i++) {
 		std::cout << "Set " << i + 1;
 		if (sets[i].weight != -1) {
 			std::cout << " (" << sets[i].weight << " lbs): ";
@@ -210,7 +210,7 @@ void Exercise::display_exercise() {
 
 double Exercise::calculate_volume() {
 	double ans = 0;
-	for (int i = 0; i < sets.size(); i++) {
+	for (int i = 0; i < static_cast<int>(sets.size()); i++) {
 		ans += sets[i].weight * sets[i].reps;
 	}
 	return ans;
@@ -220,7 +220,7 @@ void Exercise::clear() {
 	sets.clear();
 }
 
-int Exercise::size() {
+std::size_t Exercise::size() {
 	return sets.size();
 }
 
@@ -237,9 +237,18 @@ void Exercise::remove()
 std::string Exercise::get_info()
 {
 	std::string info = exercise_name + "\n";
-	for (int i = 0; i < sets.size(); i++) {
+	for (int i = 0; i < static_cast<int>(sets.size()); i++) {
 		info += std::to_string(sets[i].reps) + " " + std::to_string(sets[i].time) + " " + std::to_string(sets[i].rest) + " " + bool_to_string(sets[i].AMRAP) + " " + bool_to_string(sets[i].ALAP);
 		info += "\n";
 	}
 	return info;
+}
+
+void Exercise::swap_sets(int ind1, int ind2)
+{
+	if (valid_index(ind1) && valid_index(ind2)) {
+		Set tmp = sets[ind1];
+		sets[ind1] = sets[ind2];
+		sets[ind2] = tmp;
+	}
 }

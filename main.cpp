@@ -5,12 +5,8 @@
 using namespace std;
 
 int main() {
-	Menu m;
-	m.create_day("PPL", 0);
-	char a = 'a';
-	while (a == 'a') {
-		cin >> a;
-	}
+	Menu men;
+	WorkoutPlan p = men.create_plan();
 	
 	return 0;
 }

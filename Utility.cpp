@@ -4,6 +4,7 @@
 #include <sstream>
 #include "utility.h"
 
+
 bool file_exists(std::string filename) {
 	std::ifstream ifs(filename);
 	return ifs.good();
@@ -23,7 +24,7 @@ bool string_is_double(const std::string s)
 std::string space_to_underscore(std::string s) 
 {
 	std::string convert;
-	for (int i = 0; i < s.length(); i++) {
+	for (int i = 0; i < static_cast<int>(s.length()); i++) {
 		if (s[i] == ' ') {
 			convert += '_';
 		}
@@ -48,4 +49,18 @@ std::string bool_to_string(bool b)
 		return "true";
 	}
 	return "false";
+}
+
+std::string underscore_to_space(std::string s)
+{
+	std::string convert;
+	for (int i = 0; i < static_cast<int>(s.length()); i++) {
+		if (s[i] == '_') {
+			convert += ' ';
+		}
+		else {
+			convert += s[i];
+		}
+	}
+	return convert;
 }

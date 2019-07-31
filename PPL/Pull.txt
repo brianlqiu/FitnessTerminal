@@ -1,0 +1,28 @@
+2
+Pendlay Row
+5 -1 180 false false
+5 -1 180 false false
+5 -1 180 false false
+5 -1 180 false false
+5 -1 180 true false
+~
+Pull Up
+12 -1 90 false false
+12 -1 90 false false
+12 -1 90 false false
+~
+Seated Row
+12 -1 90 false false
+12 -1 90 false false
+12 -1 90 false false
+~
+Hammer Curl
+12 -1 90 false false
+12 -1 90 false false
+12 -1 90 false false
+~
+Bicep Curl
+12 -1 90 false false
+12 -1 90 false false
+12 -1 90 false false
+~
