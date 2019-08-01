@@ -29,7 +29,7 @@ bool Exercise::valid_index(int index)
 Exercise::Exercise(std::string name) 
 {
 	exercise_name = name;
-	file_name = space_to_underscore(name) + ".txt";
+	file_name = "./Exercises/" + space_to_underscore(name) + ".txt";
 	if (!file_exists(name)) {
 		std::ofstream outfile(file_name);
 	}

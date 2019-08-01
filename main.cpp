@@ -6,7 +6,7 @@ using namespace std;
 
 int main() {
 	Menu men;
-	WorkoutPlan p = men.create_plan();
+	men.main_menu();
 	
 	return 0;
 }

@@ -1,7 +1,13 @@
+#ifndef MENU_CPP
+#define MENU_CPP
+
 #include "fitness.h"
 #include "utility.h"
 #include <iostream>
 #include <string>
+#include <filesystem>
+
+namespace fs = std::filesystem;
 
 bool Menu::exit(std::string response) 
 {
@@ -735,3 +741,93 @@ WorkoutPlan Menu::create_plan()
 	WorkoutPlan blank;
 	return blank;
 }
+
+Menu::Menu() 
+{
+	for (const auto& entry : fs::directory_iterator("./")) {
+		if (fs::is_directory(entry.path()) && entry.path().string().find("/.") == std::string::npos && entry.path().string().find("Exercises") == std::string::npos) {
+			WorkoutPlan p(entry.path().filename());
+			plans.push_back(p);
+		}
+	}
+}
+
+void Menu::display_plans()
+{
+	for (int i = 0; i < plans.size(); i++) {
+		std::cout << i + 1 << " - " << plans[i].get_name() << std::endl;
+	}
+}
+
+void Menu::choose_plan()
+{
+	int index = prompt_index(plans.size(), false);
+	if (index != -1) {
+		edit_plan(plans[index]);
+	}
+}
+
+void Menu::menu_options()
+{
+	std::string response;
+	do {
+		std::cout << "-----------------------------------" << std::endl;
+		display_plans();
+		std::cout << "-----------------------------------" << std::endl;
+		std::cout << "Options: " << std::endl;
+		std::cout << "c - Create new plan" << std::endl;
+		std::cout << "# - Enter index of plan to edit" << std::endl;
+		std::cout << "-----------------------------------" << std::endl;
+		std::cout << std::endl << "Enter your input: ";
+		std::getline(std::cin, response);
+		int index;
+		if (string_is_integer(response)) {
+			index = std::stoi(response);
+		}
+		if (response == "c") {
+			WorkoutPlan p = create_plan();
+			plans.push_back(p);
+			p.update();
+		}
+		else if (string_is_integer(response) && index >= 1 && index <= plans.size()) {
+			edit_plan(plans[index - 1]);
+			plans[index - 1].update();
+		}
+		else {
+			std::cout << "Invalid response" << std::endl;
+		}
+	} while (!exit(response));
+}
+
+void Menu::main_menu() 
+{
+	std::string response;
+	do {
+		std::cout << "-----------------------------------" << std::endl;
+		std::cout << "Main Menu" << std::endl;
+		std::cout << "-----------------------------------" << std::endl;
+		std::cout << "Options: " << std::endl;
+		std::cout << "1 - Start a workout" << std::endl;
+		std::cout << "2 - Add/edit plans" << std::endl;
+		std::cout << "3 - Statistics" << std::endl;
+		std::cout << "-----------------------------------" << std::endl;
+		std::cout << std::endl << "Enter your input: ";
+		std::getline(std::cin, response);
+
+		if (response == "1") {
+			std::cout << "To be implemented" << std::endl;
+		}
+		else if (response == "2") {
+			menu_options();
+		}
+		else if (response == "3") {
+			std::cout << "To be implemented" << std::endl;
+		}
+		else {
+			std::cout << "Invalid response" << std::endl;
+		}
+
+	} while (!exit(response));
+}
+
+#endif

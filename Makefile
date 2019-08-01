@@ -5,7 +5,7 @@ exercise.o: exercise.cpp
 	g++-9.1.0 -c exercise.cpp
 
 menu.o: menu.cpp
-	g++-9.1.0 -c menu.cpp
+	g++-9.1.0 -c menu.cpp -std=c++17 -lstd++fs
 
 utility.o: utility.cpp
 	g++-9.1.0 -c utility.cpp

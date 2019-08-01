@@ -113,6 +113,8 @@ private:
 
 class Menu {
 public:
+	Menu();
+
 	Exercise create_exercise();
 	WorkoutDay create_day(std::string planname, int index);
 	WorkoutPlan create_plan();
@@ -151,6 +153,11 @@ public:
 	void prompt_remove_day(WorkoutPlan& w);
 	void prompt_clear_days(WorkoutPlan& w);
 	
+	//Main menu
+	void main_menu();
+	void display_plans();
+	void choose_plan();
+	void menu_options();
 
 private:
 	bool exit(std::string response);
@@ -164,6 +171,8 @@ private:
 	int prompt_ALAP();
 	int prompt_index(int size, bool add);
 	std::string prompt_name();
+
+	std::vector<WorkoutPlan> plans;
 };
 
 
